@@ -10,11 +10,12 @@ namespace _3HW {
         
         [SerializableAttribute]
         public class NumInfo {
-            public List<int> o_List;
+            public int i_BoundCount;
+            public int[] ia_List;
             public int i_Operater;
             public NumInfo() {
-                o_List = new List<int>();
-                o_List.Add(0);
+                ia_List = new int[2];                
+                i_BoundCount = 1;
                 i_Operater = 0;
             }
         }
@@ -27,19 +28,21 @@ namespace _3HW {
                 o_Num = (NumInfo)ViewState["PreivousInfo"];
             }
 
-            int i_Ind = (o_Num.o_List.Count -1);
-            i_Num = (o_Num.o_List)[i_Ind];
+            int i_Ind = (o_Num.i_BoundCount - 1);
+            i_Num = (o_Num.ia_List)[i_Ind];
             lb_Result.Text = i_Num.ToString();
         }
 
         protected void bt_Add_Click(object sender, EventArgs e) {
-            if (o_Num.o_List.Count > 1) {
-                o_Num.o_List[0] += o_Num.o_List[1];
-                o_Num.o_List.RemoveAt(1);
+            if (o_Num.i_BoundCount > 1) {
+                o_Num.ia_List[0] += o_Num.ia_List[1];
+                o_Num.ia_List[1] = 0;
+                o_Num.i_BoundCount--;
             }
             o_Num.i_Operater = 1;
             lb_Operate.Text = "+";
-            o_Num.o_List.Add(0);
+            o_Num.ia_List[1] = 0;
+            o_Num.i_BoundCount++;
             ViewState["PreivousInfo"] = o_Num;
         }
 
@@ -64,16 +67,17 @@ namespace _3HW {
         protected void bt_Equals_Click(object sender, EventArgs e) {
             switch (o_Num.i_Operater) {
                 case 1:
-                    if (o_Num.o_List.Count > 1) {
-                        o_Num.o_List[0] += o_Num.o_List[1];
-                        o_Num.o_List.RemoveAt(1);
+                    if (o_Num.i_BoundCount > 1) {
+                        o_Num.ia_List[0] += o_Num.ia_List[1];
+                        o_Num.ia_List[1] = 0;
+                        o_Num.i_BoundCount--;                        
                     }
                     break;
                 default:
                     break;
             }            
             lb_Operate.Text = "";
-            lb_Result.Text = ((o_Num.o_List)[0]).ToString();
+            lb_Result.Text = (o_Num.ia_List[0]).ToString();
 
             ViewState["PreivousInfo"] = o_Num = null;
         }
@@ -137,8 +141,8 @@ namespace _3HW {
         }
 
         private void mt_SetInfo() {
-            int i_Ind = (o_Num.o_List.Count - 1) ;
-            (o_Num.o_List)[i_Ind] = i_Num;
+            int i_Ind = (o_Num.i_BoundCount - 1) ;            
+            o_Num.ia_List[i_Ind] = i_Num;
             ViewState["PreivousInfo"] = o_Num;
         }
 
