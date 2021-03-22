@@ -136,6 +136,9 @@ namespace _3HW {
 
         }
 
+        /// <summary>
+        /// 將資料寫入資料
+        /// </summary>
         private void mt_SetInfo() {
             int i_Ind = (o_Num.o_List.Count - 1) ;
             (o_Num.o_List)[i_Ind] = i_Num;
